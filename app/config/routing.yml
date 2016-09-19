@@ -1,0 +1,10 @@
+products_products:
+    resource: "@ProductsProductsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+logout:
+    path: /logout
+
+login:
+    path: /login
+    defaults: { _controller: ProductsProductsBundle:Security:login}

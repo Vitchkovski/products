@@ -1,0 +1,54 @@
+products_products_homepage:
+    path:     /
+    defaults: { _controller: ProductsProductsBundle:Users:register }
+
+
+ProductsProductsBundle_login:
+    path:  /login
+    defaults: { _controller: "ProductsProductsBundle:Security:login" }
+    requirements:
+        methods:  GET|POST
+
+ProductsProductsBundle_register:
+    path:  /register
+    defaults: { _controller: "ProductsProductsBundle:Users:register" }
+    requirements:
+        methods:  GET|POST
+
+ProductsProductsBundle_restorePassword:
+    path:  /password_recovery
+    defaults: { _controller: "ProductsProductsBundle:Users:passwordRecovery" }
+    requirements:
+        methods:  GET|POST
+
+ProductsProductsBundle_passwordResetLink:
+    path:  /password_reset/{resetEmailCode}
+    defaults: { _controller: "ProductsProductsBundle:Users:passwordReset" }
+    requirements:
+        methods:  GET|POST
+
+ProductsProductsBundle_userPersonalPage:
+    path:  /products
+    defaults: { _controller: "ProductsProductsBundle:Products:index" }
+    requirements:
+        methods:  GET|POST
+
+ProductsProductsBundle_createProduct:
+    path:  /products/create
+    defaults: { _controller: "ProductsProductsBundle:Products:create" }
+    requirements:
+        methods:  GET|POST
+
+ProductsProductsBundle_deleteProduct:
+    path:  /products/{product_id}/delete/
+    defaults: { _controller: "ProductsProductsBundle:Products:delete" }
+    requirements:
+        product_id:  \d+
+
+
+ProductsProductsBundle_editProduct:
+    path:  /products/{product_id}/edit/
+    defaults: { _controller: "ProductsProductsBundle:Products:edit" }
+    requirements:
+        product_id:  \d+
+

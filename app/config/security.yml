@@ -1,0 +1,32 @@
+security:
+    providers:
+        administrators: 
+            entity: { class: ProductsProductsBundle:User, property: username }
+    encoders:
+        Products\ProductsBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12    
+    
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            security: false
+
+        main:
+            anonymous: ~
+            http_basic: ~
+            provider: administrators
+            form_login:
+                login_path: /login
+                check_path: /login
+                csrf_token_generator: security.csrf.token_manager
+            logout:    
+                path: /logout
+                target: /login
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/products$, role: IS_AUTHENTICATED_FULLY }
+        - { path: ^/products/.*, role: IS_AUTHENTICATED_FULLY }
