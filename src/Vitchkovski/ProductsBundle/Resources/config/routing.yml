@@ -1,0 +1,54 @@
+vitchkovski_products_homepage:
+    path:     /
+    defaults: { _controller: VitchkovskiProductsBundle:Users:register }
+
+
+VitchkovskiProductsBundle_login:
+    path:  /login
+    defaults: { _controller: "VitchkovskiProductsBundle:Security:login" }
+    requirements:
+        methods:  GET|POST
+
+VitchkovskiProductsBundle_register:
+    path:  /register
+    defaults: { _controller: "VitchkovskiProductsBundle:Users:register" }
+    requirements:
+        methods:  GET|POST
+
+VitchkovskiProductsBundle_restorePassword:
+    path:  /password_recovery
+    defaults: { _controller: "VitchkovskiProductsBundle:Users:passwordRecovery" }
+    requirements:
+        methods:  GET|POST
+
+VitchkovskiProductsBundle_passwordResetLink:
+    path:  /password_reset/{resetEmailCode}
+    defaults: { _controller: "VitchkovskiProductsBundle:Users:passwordReset" }
+    requirements:
+        methods:  GET|POST
+
+VitchkovskiProductsBundle_userPersonalPage:
+    path:  /products
+    defaults: { _controller: "VitchkovskiProductsBundle:Products:index" }
+    requirements:
+        methods:  GET|POST
+
+VitchkovskiProductsBundle_createProduct:
+    path:  /products/create
+    defaults: { _controller: "VitchkovskiProductsBundle:Products:create" }
+    requirements:
+        methods:  GET|POST
+
+VitchkovskiProductsBundle_deleteProduct:
+    path:  /products/{product_id}/delete/
+    defaults: { _controller: "VitchkovskiProductsBundle:Products:delete" }
+    requirements:
+        product_id:  \d+
+
+
+VitchkovskiProductsBundle_editProduct:
+    path:  /products/{product_id}/edit/
+    defaults: { _controller: "VitchkovskiProductsBundle:Products:edit" }
+    requirements:
+        product_id:  \d+
+

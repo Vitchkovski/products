@@ -1,0 +1,63 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Vitchkovski | Personal Page{% endblock %}
+
+{% block body %}
+
+
+    <h2 align="center">My Product List Page | {{ app.user.username }}
+    </h2><br>
+    <div align="right">
+        <a class="btn btn-success" href='{{ path('VitchkovskiProductsBundle_createProduct') }}'>Add New Product</a>
+        <a href="{{ path('logout') }}" class="btn btn-warning">Logout</a>
+    </div>
+    {% if products %}
+        <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Picture</th>
+            <th>Product Name</th>
+            <th>Product Category</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <th>
+                    {% if product.productImgName|length > 0 %}
+                        <a href="{{ asset('uploads/'~ product.user.userId ~ '/original/'~product.productImgName) }}" target="_blank">
+                        <img class="img-rounded"
+                             src="{{ asset('uploads/'~ product.user.userId ~ '/cropped/'~product.productImgName) }}">
+                        </a>
+                    {% endif %}
+                </th>
+                <th style="word-wrap: break-word;min-width: 160px;max-width: 300px;">{{ product.productName }}</th>
+                <th style="word-wrap: break-word;min-width: 160px;max-width: 300px;">{% set categoriesLine %}{% for key, category in product.categories %}{{ category.categoryName }}, {% endfor %}{% endset %}
+                    {{ categoriesLine|trim(", ") }}
+                </th>
+
+                <th>
+                    <div align="right">
+                        <a class="btn btn-default"
+                           href='{{ path('VitchkovskiProductsBundle_editProduct', {'product_id':  product.productId  }) }}'>
+                            Edit
+                        </a>
+                        <a class="btn btn-danger"
+                           href='{{ path('VitchkovskiProductsBundle_deleteProduct', {'product_id':  product.productId  }) }}'
+                           onclick="if(confirm('Delete product?'))submit();else return false;">
+                            Delete
+                        </a>
+                    </div>
+                </th>
+
+            </tr>
+        {% endfor %}
+    {% else %}
+        <div align="center">
+            <br>There is no products in your cart yet.
+        </div>
+    {% endif %}
+    </tbody>
+    </table>
+{% endblock %}

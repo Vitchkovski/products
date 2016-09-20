@@ -1,0 +1,110 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Vitchkovski | Add Product{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery-3.1.0.min.js') }}"></script>
+    <script type="text/javascript">
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addTagLink = $('<a href="#" class="btn btn-warning">Add New Category</a>');
+        var $newLinkLi = $('<div></div>').append($addTagLink);
+
+        jQuery(document).ready(function() {
+            // Get the div that holds the collection of tags
+            $collectionHolder = $('div.categories');
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length + 1);
+
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<div></div>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
+
+    </script>
+{% endblock %}
+
+{% block body %}
+    <h2>Add Product | {{ app.user.username }}</h2>
+    <form enctype="multipart/form-data" role="form" method="post"
+          action="{{ path('VitchkovskiProductsBundle_createProduct') }}">
+        <div class="form-group">
+            <div class="hide-upload-btn-div">
+                {{ form_label(form.product_img_name, 'Product Picture') }}
+                {{ form_widget(form.product_img_name) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.product_name, 'Product Name:') }}
+            {{ form_widget(form.product_name, {'attr': {'class': 'form-control', 'placeholder':'Product Name'}}) }}
+            {{ form_row(form._token) }}
+        </div>
+
+        {{ form_label(form.categories, 'Category:') }}
+
+        {% for category in form.categories %}
+            <div class="form-group">
+                {{ form_widget(category.category_name, {'attr': {'class': 'form-control', 'placeholder':'Category Name'}}) }}
+            </div>
+        {% endfor %}
+        {% if form.categories|length == 0 %}
+            <div id="product_categories___name__" class="form-group">
+                <input class="form-control" placeholder="Category Name" type="text"
+                       id="product_categories___name___category_name"
+                       name="product[categories][0][category_name]"
+                       maxlength="255"/>
+            </div>
+        {% endif %}
+        <div class="categories"
+             data-prototype="
+         {% filter escape %}
+             {{ include('VitchkovskiProductsBundle:Templates:categoryPrototype.html.twig', { 'form': form.categories.vars.prototype }) }}
+         {% endfilter %}">
+        </div>
+        <div align="right">
+            <input class="btn btn-success" name="updateProduct" type="submit" value="Save">
+            <a class="btn btn-danger" href="{{ path('VitchkovskiProductsBundle_userPersonalPage') }}">Cancel</a>
+        </div>
+        <br>
+    </form>
+
+
+    {% if errors is defined  and errors|length > 0 %}
+        {%- for error in errors -%}
+            <p class="alert alert-danger">
+                {{ error[0] }}
+            </p>
+        {%- endfor -%}
+    {% endif %}
+
+{% endblock %}

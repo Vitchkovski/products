@@ -1,5 +1,5 @@
 products_products:
-    resource: "@ProductsProductsBundle/Resources/config/routing.yml"
+    resource: "@VitchkovskiProductsBundle/Resources/config/routing.yml"
     prefix:   /
 
 logout:
@@ -7,4 +7,4 @@ logout:
 
 login:
     path: /login
-    defaults: { _controller: ProductsProductsBundle:Security:login}
+    defaults: { _controller: VitchkovskiProductsBundle:Security:login}

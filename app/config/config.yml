@@ -67,5 +67,5 @@ swiftmailer:
 
 services:
     app.image_uploader:
-        class: Products\ProductsBundle\ImageUploader
+        class: Vitchkovski\ProductsBundle\ImageUploader
         arguments: ['../web/uploads/']

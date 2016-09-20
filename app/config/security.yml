@@ -2,9 +2,9 @@ security:
     providers:
         administrators: 
             entity:
-              class: ProductsProductsBundle:User
+              class: VitchkovskiProductsBundle:User
     encoders:
-        Products\ProductsBundle\Entity\User:
+        Vitchkovski\ProductsBundle\Entity\User:
             algorithm: bcrypt
             cost: 12    
     
