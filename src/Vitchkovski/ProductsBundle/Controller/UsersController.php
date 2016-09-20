@@ -97,7 +97,7 @@ class UsersController extends Controller
                 ->setTo($email)
                 ->setBody(
                     $this->renderView(
-                        '@ProductsProducts/Templates/resetPasswordEmail.html.twig',
+                        '@VitchkovskiProducts/Templates/resetPasswordEmail.html.twig',
                         array('name' => $username, 'security_code' => $emailResetLinkCode)
                     ),
                     'text/html');
