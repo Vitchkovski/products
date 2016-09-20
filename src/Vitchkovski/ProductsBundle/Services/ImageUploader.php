@@ -1,6 +1,6 @@
 <?php
 
-namespace Vitchkovski\ProductsBundle;
+namespace Vitchkovski\ProductsBundle\Services;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

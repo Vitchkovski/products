@@ -1,4 +1,4 @@
 services:
     app.image_uploader:
-        class: Vitchkovski\ProductsBundle\ImageUploader
+        class: Vitchkovski\ProductsBundle\Services\ImageUploader
         arguments: ['../web/uploads/']
