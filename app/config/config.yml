@@ -64,8 +64,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-services:
-    app.image_uploader:
-        class: Vitchkovski\ProductsBundle\ImageUploader
-        arguments: ['../web/uploads/']
