@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
     /**
-     * @ORM\id
+     * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
