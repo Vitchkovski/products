@@ -58,10 +58,8 @@ class UsersController extends Controller
 
     public function passwordRecoveryAction(Request $request)
     {
-
-
+        //General process of password resetting. Showing form to submit email, sending email
         $form = $this->createForm(\Products\ProductsBundle\Form\Type\PasswordRecoverType::class);
-
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
