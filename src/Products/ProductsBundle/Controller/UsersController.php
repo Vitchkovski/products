@@ -107,6 +107,10 @@ class UsersController extends Controller
             //send
             $this->get('mailer')->send($message);
 
+            $this->addFlash(
+                'notice',
+                'Email to reset your password has been sent.');
+
         }
 
 
