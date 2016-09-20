@@ -1,7 +1,8 @@
 security:
     providers:
         administrators: 
-            entity: { class: ProductsProductsBundle:User, property: username }
+            entity:
+              class: ProductsProductsBundle:User
     encoders:
         Products\ProductsBundle\Entity\User:
             algorithm: bcrypt

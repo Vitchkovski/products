@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Email;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Products\ProductsBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="users")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields="email", message="Sorry, this email address is already in use.", groups={"registration"})
