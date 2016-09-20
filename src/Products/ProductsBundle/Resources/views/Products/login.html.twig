@@ -1,0 +1,28 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}Vitchkovski | Login Page{% endblock %}
+
+{% block body %}
+
+        <form class="form-signin" method='post' action='{{ path('login') }}'>
+            <h2 class="form-signin-heading">Enter</h2>
+            <input type="text" id="inputName" name='_username' class="form-control" placeholder="User Name or Email" required
+                   autofocus value='{{ last_username }}'>
+            <input type="password" id="inputPassword" name="_password" class="form-control" placeholder="Password"
+                   required>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <input type="hidden" name="_target_path" value="ProductsProductsBundle_userPersonalPage" />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+            <div align="center">
+                <a class="sign-in" href="{{ path('ProductsProductsBundle_register')}}">Register account</a> /
+                <a class="sign-in" href="{{ path('ProductsProductsBundle_restorePassword')}}">Forgot your password?</a>
+            </div>
+        </form>
+        {% if error %}
+            <p class="alert alert-danger">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+            </p>
+        {% endif %}
+
+{% endblock %}
