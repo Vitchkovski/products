@@ -30,7 +30,6 @@ class ProductsController extends Controller
                 $product->addCategory($category);
             }
         }
-        dump($products);
 
         return $this->render('ProductsProductsBundle:Products:userPersonalPage.html.twig', array(
             'products' => $products
@@ -65,7 +64,6 @@ class ProductsController extends Controller
                 //dump($fileName);
 
                 $product->setProductImgName($fileName);
-                dump($product);
             }
 
 
