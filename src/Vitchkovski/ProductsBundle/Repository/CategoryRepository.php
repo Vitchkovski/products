@@ -1,6 +1,6 @@
 <?php
 
-namespace Vitchkovski\ProductsBundle\Entity\Repository;
+namespace Vitchkovski\ProductsBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
