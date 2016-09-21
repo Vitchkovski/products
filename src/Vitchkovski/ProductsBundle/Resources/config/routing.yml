@@ -1,4 +1,4 @@
-vitchkovski_products_homepage:
+VitchkovskiProductsBundle_homepage:
     path:     /
     defaults: { _controller: VitchkovskiProductsBundle:Users:register }
 

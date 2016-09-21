@@ -61,7 +61,6 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
             }
             .sf-reset ul a,
             .sf-reset ul a:hover {
-                background: url(../images/blue-arrow.png) no-repeat right 6px;
                 padding-right: 10px;
             }
             .sf-reset ul, ol {
@@ -98,8 +97,7 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
             }
             .sf-reset p.help {
                 padding: 12px 16px;
-                word-break: break-word;
-            }
+                }
             .version {
                 text-align: right;
                 font-size: 10px;

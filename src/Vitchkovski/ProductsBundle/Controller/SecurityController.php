@@ -12,7 +12,7 @@ class SecurityController extends Controller
     {
 
         if ($this->isGranted('ROLE_USER') == true) {
-            //if user is already authorized showing personal page instead of login form
+            //if user is already authorized show personal page instead of login form
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
         }
 
