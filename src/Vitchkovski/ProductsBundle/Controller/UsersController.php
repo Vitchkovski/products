@@ -34,9 +34,8 @@ class UsersController extends Controller
             $user->setPassword($pwd);
 
             // 4) save the User!
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
 
             //5) Log in user right after creation
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
@@ -67,8 +66,9 @@ class UsersController extends Controller
             $email = $form["email"]->getData();
 
             //we must check first if user with such email exists in the DB
-            $em = $this->getDoctrine()->getManager();
-            $user = $em->getRepository('VitchkovskiProductsBundle:User')->findOneBy(array('email' => $email));
+            $user = $this->getDoctrine()->getManager()
+                ->getRepository('VitchkovskiProductsBundle:User')
+                ->findOneBy(array('email' => $email));
 
             if (!$user) {
                 //there is no such user. Show error.
@@ -87,8 +87,8 @@ class UsersController extends Controller
 
             //saving security filed to the user record
             $user->setHashKey($emailResetLinkCode);
-            $em->persist($user);
-            $em->flush();
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
 
             //preparing message
             $message = \Swift_Message::newInstance()
@@ -119,8 +119,9 @@ class UsersController extends Controller
     public function passwordResetAction($resetEmailCode, Request $request)
     {
         //first we have to confirm if reset code is correct
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('VitchkovskiProductsBundle:User')->findOneBy(array('hash_key' => $resetEmailCode));
+       $user = $this->getDoctrine()->getManager()
+           ->getRepository('VitchkovskiProductsBundle:User')
+           ->findOneBy(array('hash_key' => $resetEmailCode));
 
         if(!$user){
             //code is incorrect, notifying user
@@ -145,9 +146,8 @@ class UsersController extends Controller
             $user->setPassword($password);
 
             // save the User
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
 
             //Log in user right after creation
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
