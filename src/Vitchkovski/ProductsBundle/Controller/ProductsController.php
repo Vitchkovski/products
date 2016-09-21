@@ -4,7 +4,6 @@ namespace Vitchkovski\ProductsBundle\Controller;
 
 use Vitchkovski\ProductsBundle\Entity\Category;
 use Vitchkovski\ProductsBundle\Entity\Product;
-use Vitchkovski\ProductsBundle\Entity\ProductCategory;
 use Vitchkovski\ProductsBundle\Form\ProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,21 +15,10 @@ class ProductsController extends Controller
     {
         //retrieving user info
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        //dump($user);
 
         //retrieving user products
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('VitchkovskiProductsBundle:Product')->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
-
-        //Retrieving products' categories
-        foreach ($products as $product) {
-            $categories = $em->getRepository('VitchkovskiProductsBundle:Category')->getCategoriesForProduct($product->getProductId());
-            // dump($categories);
-
-            foreach ($categories as $category) {
-                $product->addCategory($category);
-            }
-        }
 
         return $this->render('VitchkovskiProductsBundle:Products:userPersonalPage.html.twig', array(
             'products' => $products
@@ -246,13 +234,12 @@ class ProductsController extends Controller
                     $em->flush();
 
 
-
                 }
 
             }
 
 
-           return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
+            return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
         }
 
 

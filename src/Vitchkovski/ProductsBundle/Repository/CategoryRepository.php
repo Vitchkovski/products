@@ -17,8 +17,8 @@ class CategoryRepository extends EntityRepository
         $qb = $this->createQueryBuilder('uc')
             ->select('c')
             ->from('VitchkovskiProductsBundle:Category', 'c')
-            ->innerJoin('c.products_x_categories','pxc')
-            ->where('pxc.product = :productId')
+            ->leftJoin('c.product', 'p')
+            ->where('p.product_id = :productId')
             ->setParameter('productId', $productId);
 
         return $qb->getQuery()

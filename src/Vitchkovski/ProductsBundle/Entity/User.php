@@ -27,8 +27,6 @@ class User implements UserInterface
     {
         $this->products = new ArrayCollection();
 
-        $this->categories = new ArrayCollection();
-
     }
 
     /**
@@ -84,11 +82,6 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Product", mappedBy="user")
      */
     protected $products;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="user")
-     */
-    protected $categories;
 
     /**
      * @return mixed
@@ -178,7 +171,7 @@ class User implements UserInterface
      * @param \Vitchkovski\ProductsBundle\Entity\Product $products
      * @return User
      */
-    public function addProduct(\Vitchkovski\ProductsBundle\Entity\Product $products)
+    public function addProduct(Product $products)
     {
         $this->products[] = $products;
 
@@ -190,7 +183,7 @@ class User implements UserInterface
      *
      * @param \Vitchkovski\ProductsBundle\Entity\Product $products
      */
-    public function removeProduct(\Vitchkovski\ProductsBundle\Entity\Product $products)
+    public function removeProduct(Product $products)
     {
         $this->products->removeElement($products);
     }
@@ -203,39 +196,6 @@ class User implements UserInterface
     public function getProducts()
     {
         return $this->products;
-    }
-
-    /**
-     * Add categories
-     *
-     * @param \Vitchkovski\ProductsBundle\Entity\Category $categories
-     * @return User
-     */
-    public function addCategory(\Vitchkovski\ProductsBundle\Entity\Category $categories)
-    {
-        $this->categories[] = $categories;
-
-        return $this;
-    }
-
-    /**
-     * Remove categories
-     *
-     * @param \Vitchkovski\ProductsBundle\Entity\Category $categories
-     */
-    public function removeCategory(\Vitchkovski\ProductsBundle\Entity\Category $categories)
-    {
-        $this->categories->removeElement($categories);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCategories()
-    {
-        return $this->categories;
     }
 
     /**

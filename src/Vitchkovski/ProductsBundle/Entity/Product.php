@@ -3,6 +3,7 @@
 namespace Vitchkovski\ProductsBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -44,10 +45,8 @@ class Product
     protected $product_img_name;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProductCategory", mappedBy="product", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="product")
      */
-    protected $products_x_categories;
-
     protected $categories;
 
     /**
@@ -133,42 +132,11 @@ class Product
      */
     public function __construct()
     {
-        $this->products_x_categories = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
-    /**
-     * Add products_x_categories
-     *
-     * @param \Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories
-     * @return Product
-     */
-    public function addProductsXCategory(\Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories)
-    {
-        $this->products_x_categories[] = $productsXCategories;
 
-        return $this;
-    }
 
-    /**
-     * Remove products_x_categories
-     *
-     * @param \Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories
-     */
-    public function removeProductsXCategory(\Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories)
-    {
-        $this->products_x_categories->removeElement($productsXCategories);
-    }
-
-    /**
-     * Get products_x_categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProductsXCategories()
-    {
-        return $this->products_x_categories;
-    }
 
     public function addCategory(Category $category)
     {

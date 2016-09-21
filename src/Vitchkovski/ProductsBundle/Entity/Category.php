@@ -17,16 +17,9 @@ class Category
     /**
      * @ORM\id
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ProductCategory", inversedBy="categories")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $category_id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="categories")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
-     */
-    protected $user;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -34,19 +27,10 @@ class Category
     protected $category_name;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProductCategory", mappedBy="category", cascade={"all"}, orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="categories")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="product_id")
      */
-    protected $products_x_categories;
-
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->products_x_categories = new \Doctrine\Common\Collections\ArrayCollection();
-
-    }
+    protected $product;
 
     /**
      * Get category_id
@@ -81,59 +65,27 @@ class Category
         return $this->category_name;
     }
 
+
     /**
-     * Set user
+     * Set product
      *
-     * @param \Vitchkovski\ProductsBundle\Entity\User $user
+     * @param \Vitchkovski\ProductsBundle\Entity\Product $product
      * @return Category
      */
-    public function setUser(\Vitchkovski\ProductsBundle\Entity\User $user = null)
+    public function setProduct(\Vitchkovski\ProductsBundle\Entity\Product $product = null)
     {
-        $this->user = $user;
+        $this->product = $product;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get product
      *
-     * @return \Vitchkovski\ProductsBundle\Entity\User
+     * @return \Vitchkovski\ProductsBundle\Entity\Product 
      */
-    public function getUser()
+    public function getProduct()
     {
-        return $this->user;
-    }
-
-    /**
-     * Add products_x_categories
-     *
-     * @param \Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories
-     * @return Category
-     */
-    public function addProductsXCategory(\Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories)
-    {
-        $this->products_x_categories[] = $productsXCategories;
-
-        return $this;
-    }
-
-    /**
-     * Remove products_x_categories
-     *
-     * @param \Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories
-     */
-    public function removeProductsXCategory(\Vitchkovski\ProductsBundle\Entity\ProductCategory $productsXCategories)
-    {
-        $this->products_x_categories->removeElement($productsXCategories);
-    }
-
-    /**
-     * Get products_x_categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProductsXCategories()
-    {
-        return $this->products_x_categories;
+        return $this->product;
     }
 }
