@@ -38,9 +38,6 @@ class ProductsController extends Controller
         $form = $this->createForm('Vitchkovski\ProductsBundle\Form\ProductType', $product);
         $form->handleRequest($request);
 
-        $errors = $this->getErrorsAsArray($form);
-
-
         //if form was submitted a new product must be created in the DB
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -50,8 +47,8 @@ class ProductsController extends Controller
                 //starting general processing process for uploaded images.
                 //Generating new image name, cropping image, moving both original and cropped images to the user's folder.
                 $fileName = $this->get('app.image_uploader')->upload($file, $user->getUserId());
-                //dump($fileName);
 
+                //saving product image name
                 $product->setProductImgName($fileName);
             }
 
@@ -59,31 +56,22 @@ class ProductsController extends Controller
             //setting user info for a new product
             $product->setUser($user);
 
-            //saving product (without categories yet)
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
-
-            //Retrieving submitted categories
+            //retrieving submitted categories
             $categories = $product->getCategories();
-
 
             foreach ($categories as $category) {
                 if ($category->getCategoryName() !== null) {
-                    //we must create records in both user_categories and product_x_categories tables
-                    $category->setUser($user);
-                    $em->persist($category);
-
-
-                    $productCategory = new ProductCategory();
-
-                    $productCategory->setProduct($product);
-                    $productCategory->setCategory($category);
-                    $em->persist($productCategory);
-
-                    $em->flush();
+                    //for each category submitted we must set product reference
+                    $category->setProduct($product);
+                } else {
+                    //if null category was submitted - we don't need to save it in the DB
+                    $product->removeCategory($category);
                 }
             }
+
+            //saving changes to the DB
+            $this->getDoctrine()->getManager()->persist($product);
+            $this->getDoctrine()->getManager()->flush();
 
             //return to the products page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
@@ -91,8 +79,7 @@ class ProductsController extends Controller
 
         return $this->render('VitchkovskiProductsBundle:Products:addProduct.html.twig', array(
             'product' => $product,
-            'form' => $form->createView(),
-            'errors' => $errors
+            'form' => $form->createView()
         ));
     }
 

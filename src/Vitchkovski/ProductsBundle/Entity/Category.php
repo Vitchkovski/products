@@ -27,7 +27,7 @@ class Category
     protected $category_name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="categories")
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="categories", cascade={"persist"})
      * @ORM\JoinColumn(name="product_id", referencedColumnName="product_id")
      */
     protected $product;
@@ -72,7 +72,7 @@ class Category
      * @param \Vitchkovski\ProductsBundle\Entity\Product $product
      * @return Category
      */
-    public function setProduct(\Vitchkovski\ProductsBundle\Entity\Product $product = null)
+    public function setProduct(Product $product = null)
     {
         $this->product = $product;
 

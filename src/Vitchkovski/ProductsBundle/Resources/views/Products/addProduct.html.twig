@@ -12,7 +12,7 @@
         var $addTagLink = $('<a href="#" class="btn btn-warning">Add New Category</a>');
         var $newLinkLi = $('<div></div>').append($addTagLink);
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             // Get the div that holds the collection of tags
             $collectionHolder = $('div.categories');
 
@@ -23,7 +23,7 @@
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find(':input').length + 1);
 
-            $addTagLink.on('click', function(e) {
+            $addTagLink.on('click', function (e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
@@ -98,13 +98,18 @@
         <br>
     </form>
 
+    {% spaceless %}
+        {% if not form.vars.valid %}
+            <div class="alert alert-danger">
+                {{ form_errors(form) }}
 
-    {% if errors is defined  and errors|length > 0 %}
-        {%- for error in errors -%}
-            <p class="alert alert-danger">
-                {{ error[0] }}
-            </p>
-        {%- endfor -%}
-    {% endif %}
+                {% for children in form.children %}
+                    {% if not children.vars.valid %}
+                        {{ form_errors(children) }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endspaceless %}
 
 {% endblock %}

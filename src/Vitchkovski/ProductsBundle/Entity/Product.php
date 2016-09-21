@@ -45,7 +45,7 @@ class Product
     protected $product_img_name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="product", cascade={"persist"})
      */
     protected $categories;
 
