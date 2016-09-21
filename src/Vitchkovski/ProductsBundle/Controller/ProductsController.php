@@ -123,38 +123,26 @@ class ProductsController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         //searching for the product to edit. Should belong to the logged user.
-        $em = $this->getDoctrine()->getManager();
-
-
-        $product = $em->getRepository('VitchkovskiProductsBundle:Product')->findOneBy(array('user' => $user->getUserId(),
-            'product_id' => $product_id));
+        $product = $this->getDoctrine()->getManager()
+            ->getRepository('VitchkovskiProductsBundle:Product')
+            ->findOneBy(array('user' => $user->getUserId(), 'product_id' => $product_id));
 
 
         if (!$product) {
             //There is no such product.
-            $this->addFlash(
-                'notice',
-                'Product id is incorrect.');
+            $this->addFlash('notice', 'Product id is incorrect.');
 
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
-
         }
 
         //Retrieving product's categories
-        $categories = $em->getRepository('VitchkovskiProductsBundle:Category')->getCategoriesForProduct($product_id);
+        $categories = $product->getCategories();
 
-        foreach ($categories as $category) {
-            $product->addCategory($category);
-        }
-
-        //saving product image name
+        //saving original product image name (before submit).
         $productImg = $product->getProductImgName();
 
-        //we don't need string image name when creating input form
-        $product->setProductImgName(null);
+        //rendering form
         $form = $this->createForm('Vitchkovski\ProductsBundle\Form\ProductType', $product);
-
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -171,80 +159,37 @@ class ProductsController extends Controller
 
             } else {
 
-                //saving initial image name (whether it is null or not)
+                //saving original image name (whether it is null or not)
                 $product->setProductImgName($productImg);
             }
 
-            //saving product (without categories yet)
-            $em->persist($product);
-            $em->flush();
-
-            $categories = $product->getCategories();
-            //dump($categories);
 
             foreach ($categories as $category) {
-
-                //if category submitted is null it means we have to delete it
-                if ($category->getCategoryName() == null) {
-
-                    $em->remove($category);
-
-                    $em->flush();
-
+                if ($category->getCategoryName() !== null) {
+                    //for each category submitted we must set product reference
+                    $category->setProduct($product);
                 } else {
-
-                    //we must create records in both user_categories and product_x_categories tables
-                    $category->setUser($user);
-
-                    $em->remove($category);
-                    $em->flush();
-
-
-                    //connection must be created only if it is not exist already
-                    if (count($category->getProductsXCategories()) == 0) {
-                        $productCategory = new ProductCategory();
-                        $productCategory->setProduct($product);
-                        $productCategory->setCategory($category);
-
-                        $category->addProductsXCategory($productCategory);
-                    }
-
-                    $em->persist($category);
-                    $em->flush();
-
-
+                    //if null category was submitted we have to delete it from the DB
+                    $this->getDoctrine()->getManager()
+                        ->remove($category);
                 }
-
             }
 
+            //saving changes
+            $this->getDoctrine()->getManager()
+                ->flush();
 
+            //return to the personal page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
         }
 
-
+        //form was not submitted yet, rendering form
         return $this->render('VitchkovskiProductsBundle:Products:editProduct.html.twig', array(
             'form' => $form->createView(),
             'product' => $product,
             'categories_number' => count($categories),
-            'product_img' => $productImg,
+            'product_img' => $product->getProductImgName(),
         ));
-    }
-
-    public function getErrorsAsArray($form)
-    {
-        //getting form validation array as an array for further handling
-        $errors = array();
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $key => $child) {
-            if ($err = $this->getErrorsAsArray($child)) {
-                $errors[$key] = $err;
-            }
-        }
-
-        return $errors;
     }
 
 }

@@ -20,16 +20,16 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('product_img_name', FileType::class, array('label' => 'Product Image:', 'required' => false))
+            ->add('product_img_name', FileType::class, array('label' => 'Product Image:',
+                'required' => false, 'data_class' => null))
             ->add('product_name', TextType::class, array('label' => 'Product Name:'))
             ->add('categories', CollectionType::class, array(
                 'entry_type' => CategoryType::class,
-                'allow_add'    => true,
+                'allow_add' => true,
                 'allow_delete' => true,
-                ))
-        ;
+            ));
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */
