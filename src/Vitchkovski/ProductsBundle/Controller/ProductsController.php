@@ -90,35 +90,27 @@ class ProductsController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         //searching for the product ot delete. Should belong to the logged user.
-        $em = $this->getDoctrine()->getManager();
-
-        $product = $em->getRepository('VitchkovskiProductsBundle:Product')->findOneBy(array('user' => $user->getUserId(),
-            'product_id' => $product_id));
+        $product = $this->getDoctrine()->getManager()
+            ->getRepository('VitchkovskiProductsBundle:Product')
+            ->findOneBy(array('user' => $user->getUserId(), 'product_id' => $product_id));
 
         if (!$product) {
             //There is no such product.
-            $this->addFlash(
-                'notice',
-                'Product id is incorrect.');
+            $this->addFlash('notice', 'Product id is incorrect.');
 
+            //stop executing, return to the personal page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
 
         }
 
-        //Retrieving product's categories to delete
-        $categories = $em->getRepository('VitchkovskiProductsBundle:Category')->getCategoriesForProduct($product_id);
-
-        foreach ($categories as $category) {
-            $em->remove($category);
-        }
-
         //deleting user product
-        $em->remove($product);
+        $this->getDoctrine()->getManager()
+            ->remove($product);
 
-        $em->flush();
+        $this->getDoctrine()->getManager()
+            ->flush();
 
         $this->addFlash('notice', "Product has been deleted successfully!");
-
 
         //returning to the personal page
         return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
