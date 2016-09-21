@@ -46,11 +46,11 @@ class UsersController extends Controller
             //6) Redirecting to the personal page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
         }
-        $errors = $this->getErrorsAsArray($form);
+
 
         return $this->render(
             'VitchkovskiProductsBundle:Login:register.html.twig',
-            array('errors' => $errors, 'form' => $form->createView())
+            array('form' => $form->createView())
         );
 
 
@@ -164,23 +164,5 @@ class UsersController extends Controller
                 'security_code' => $resetEmailCode));
 
     }
-
-    public function getErrorsAsArray($form)
-    {
-        //getting form validation array as an array for further handling
-        $errors = array();
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $key => $child) {
-            if ($err = $this->getErrorsAsArray($child)) {
-                $errors[$key] = $err;
-            }
-        }
-
-        return $errors;
-    }
-
 
 }
