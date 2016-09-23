@@ -21,19 +21,32 @@ class ImageUploader
         //moving original image to the user's folder
         $file->move($this->targetDir.$userId.'/original', $fileName);
 
-        //generating cropped image
+        //generating cropped image 64x64
         $productImage = new resizeImage();
         $productImage->load($this->targetDir."/".$userId."/original/".$fileName);
         $productPictureHeight = $productImage->getHeight();
         $productPictureWidth = $productImage->getWidth();
         if ($productPictureHeight >= $productPictureWidth)
-            $productImage->resizeToHeight(48);
+            $productImage->resizeToHeight(64);
         else
-            $productImage->resizeToWidth(48);
+            $productImage->resizeToWidth(64);
 
-        //moving cropped image to the destination folder
-        @mkdir($this->targetDir.$userId."/cropped/", 0777, true);
-        $productImage->save($this->targetDir.$userId."/cropped/".$fileName);
+        //moving cropped 64x64 image to the destination folder
+        @mkdir($this->targetDir.$userId."/cropped/64/", 0777, true);
+        $productImage->save($this->targetDir.$userId."/cropped/64/".$fileName);
+
+        //generating cropped image 128x128
+        $productImage->load($this->targetDir."/".$userId."/original/".$fileName);
+        $productPictureHeight = $productImage->getHeight();
+        $productPictureWidth = $productImage->getWidth();
+        if ($productPictureHeight >= $productPictureWidth)
+            $productImage->resizeToHeight(128);
+        else
+            $productImage->resizeToWidth(128);
+
+        //moving cropped 64x64 image to the destination folder
+        @mkdir($this->targetDir.$userId."/cropped/128/", 0777, true);
+        $productImage->save($this->targetDir.$userId."/cropped/128/".$fileName);
 
 
         return $fileName;

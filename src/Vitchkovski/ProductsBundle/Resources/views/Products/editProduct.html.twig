@@ -20,7 +20,7 @@
                 {% if product_img %}
                     <br><a href="{{ asset('uploads/'~ product.user.userId ~ '/original/'~product_img) }}" target="_blank">
                         <img class="img-rounded" style="padding-bottom: 4px"
-                             src="{{ asset('uploads/'~ product.user.userId ~ '/cropped/'~product_img) }}">
+                             src="{{ asset('uploads/'~ product.user.userId ~ '/cropped/128/'~product_img) }}">
                     </a>
                 {% endif %}
                 {{ form_widget(form.product_img_name) }}

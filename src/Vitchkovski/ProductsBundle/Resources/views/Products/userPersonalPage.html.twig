@@ -27,7 +27,7 @@
                     {% if product.productImgName|length > 0 %}
                         <a href="{{ asset('uploads/'~ product.user.userId ~ '/original/'~product.productImgName) }}" target="_blank">
                         <img class="img-rounded"
-                             src="{{ asset('uploads/'~ product.user.userId ~ '/cropped/'~product.productImgName) }}">
+                             src="{{ asset('uploads/'~ product.user.userId ~ '/cropped/64/'~product.productImgName) }}">
                         </a>
                     {% endif %}
                 </th>
