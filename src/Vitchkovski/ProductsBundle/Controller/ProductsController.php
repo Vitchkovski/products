@@ -17,8 +17,11 @@ class ProductsController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         //retrieving user products
-        $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('VitchkovskiProductsBundle:Product')->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
+        $products = $this->getDoctrine()->getManager()
+            ->getRepository('VitchkovskiProductsBundle:Product')
+            ->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
+
+
 
         return $this->render('VitchkovskiProductsBundle:Products:userPersonalPage.html.twig', array(
             'products' => $products
@@ -125,8 +128,7 @@ class ProductsController extends Controller
         //searching for the product to edit. Should belong to the logged user.
         $product = $this->getDoctrine()->getManager()
             ->getRepository('VitchkovskiProductsBundle:Product')
-            ->findOneBy(array('user' => $user->getUserId(), 'product_id' => $product_id));
-
+            ->getProductWithCategories($product_id, $user->getUserId());
 
         if (!$product) {
             //There is no such product.

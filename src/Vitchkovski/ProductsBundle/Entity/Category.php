@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * @ORM\Entity(repositoryClass="Vitchkovski\ProductsBundle\Repository\CategoryRepository")
+ * @ORM\Entity
  * @ORM\Table(name="user_categories")
  * @ORM\HasLifecycleCallbacks
  */
