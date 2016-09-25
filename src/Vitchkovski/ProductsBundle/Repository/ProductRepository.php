@@ -14,16 +14,14 @@ class ProductRepository extends EntityRepository
 {
     public function getProductWithCategories($productId, $userId)
     {
-        $qb = $this->createQueryBuilder('productRepository')
-            ->select('p', 'c')
-            ->from('VitchkovskiProductsBundle:Product', 'p')
-            ->leftJoin('p.categories', 'c')
-            ->where('c.product = :productId')
-            ->andWhere('productRepository.user = :user_id')
+        $qb = $this->getEntityManager()->createQuery('SELECT p, c FROM VitchkovskiProductsBundle:Product p 
+        LEFT OUTER JOIN p.categories c  
+        WHERE p.product_id = :productId
+          and p.user = :user_id')
             ->setParameter('user_id', $userId)
             ->setParameter('productId', $productId);
 
-        return $qb->getQuery()
-            ->getOneOrNullResult();
+        return $qb->getOneOrNullResult();
+
     }
 }
