@@ -1,37 +1,86 @@
 <?php
 
-namespace Vitchkovski\ProductsBundle\Controller;
+namespace Vitchkovski\ProductsBundle\Controller\RestControllers;
 
+use FOS\RestBundle\Controller\FOSRestController;
 use Vitchkovski\ProductsBundle\Entity\Category;
 use Vitchkovski\ProductsBundle\Entity\Product;
 use Vitchkovski\ProductsBundle\Form\ProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\View\View;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 
-class ProductsController extends Controller
+class ProductsController extends FOSRestController
 {
-    public function indexAction()
+    public function getProductAction($id)
     {
-        //retrieving user info
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        //retrieving user products
-        $products = $this->getDoctrine()->getManager()
+        $product = $this
+            ->getDoctrine()
             ->getRepository('VitchkovskiProductsBundle:Product')
-            ->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
+            ->findBy(array('product_id' => $id, 'user' => $user->getUserId()));
 
-        $serializer = $this->get('serializer');
-dump($products);
+        if (!$product) {
+            throw $this->createNotFoundException('Product not found');
+        }
 
-        return $this->render('VitchkovskiProductsBundle:Products:userPersonalPage.html.twig', array(
-            'products' => $products
-        ));
+        $encoders = new JsonEncoder();
+        $normalizers = new ObjectNormalizer();
+
+        $normalizers->setCircularReferenceHandler(function ($category) {
+            return $category->getCategories();
+        });
+
+        $normalizers->setIgnoredAttributes(array('user', 'categories1'));
+
+
+        $serializer = new Serializer(array($normalizers), array($encoders));
+
+        $jsonContent = $serializer->serialize($product, 'json');
+
+        return $jsonContent;
+
     }
 
-    public function createAction(Request $request)
+    public function getProductsAction()
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        $product = $this
+            ->getDoctrine()
+            ->getRepository('VitchkovskiProductsBundle:Product')
+            ->findBy(array('user' => $user->getUserId()));
+
+        if (!$product) {
+            throw $this->createNotFoundException('Product not found');
+        }
+
+        $encoders = new JsonEncoder();
+        $normalizers = new ObjectNormalizer();
+
+        $normalizers->setCircularReferenceHandler(function ($category) {
+            return $category->getCategories();
+        });
+
+        $normalizers->setIgnoredAttributes(array('user', 'categories1'));
+
+
+        $serializer = new Serializer(array($normalizers), array($encoders));
+
+        $jsonContent = $serializer->serialize($product, 'json');
+
+        return $jsonContent;
+    }
+
+    public function getProductsNewAction(Request $request)
+    {
         //retrieving user info
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -42,12 +91,9 @@ dump($products);
         $form = $this->createForm('Vitchkovski\ProductsBundle\Form\ProductType', $product);
         $form->handleRequest($request);
 
-        dump($request);
+        //dump($form->getData());
 
-        //if form was submitted a new product must be created in the DB
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            //Checking if file was submitted
+        if ($form->isValid()) {
             $file = $product->getProductImgName();
             if ($file) {
                 //starting general processing process for uploaded images.
@@ -79,34 +125,42 @@ dump($products);
             $this->getDoctrine()->getManager()->persist($product);
             $this->getDoctrine()->getManager()->flush();
 
-            //return to the products page
-            return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
+            $encoders = new JsonEncoder();
+            $normalizers = new ObjectNormalizer();
+
+            $normalizers->setCircularReferenceHandler(function ($category) {
+                return $category->getCategories();
+            });
+
+            $normalizers->setIgnoredAttributes(array('user', 'categories1'));
+
+
+            $serializer = new Serializer(array($normalizers), array($encoders));
+
+            $jsonContent = $serializer->serialize($product, 'json');
+
+            return new View($jsonContent, Response::HTTP_CREATED);
         }
 
-        return $this->render('VitchkovskiProductsBundle:Products:addProduct.html.twig', array(
-            'product' => $product,
-            'form' => $form->createView()
-        ));
+
+
+        return View::create($form, 400);
+
     }
 
-    public function deleteAction($product_id)
+    public function getProductsRemoveAction($id)
     {
-
         //retrieving user info
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         //searching for the product ot delete. Should belong to the logged user.
         $product = $this->getDoctrine()->getManager()
             ->getRepository('VitchkovskiProductsBundle:Product')
-            ->findOneBy(array('user' => $user->getUserId(), 'product_id' => $product_id));
+            ->findOneBy(array('user' => $user->getUserId(), 'product_id' => $id));
 
         if (!$product) {
             //There is no such product.
-            $this->addFlash('notice', 'Product id is incorrect.');
-
-            //stop executing, return to the personal page
-            return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
-
+            throw $this->createNotFoundException('Product not found');
         }
 
         //deleting user product
@@ -116,28 +170,21 @@ dump($products);
         $this->getDoctrine()->getManager()
             ->flush();
 
-        $this->addFlash('notice', "Product has been deleted successfully!");
-
-        //returning to the personal page
-        return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
     }
 
-    public function editAction($product_id, Request $request)
+    public function getProductsEditAction($id, Request $request)
     {
-
         //retrieving user info
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         //searching for the product to edit. Should belong to the logged user.
         $product = $this->getDoctrine()->getManager()
             ->getRepository('VitchkovskiProductsBundle:Product')
-            ->getProductWithCategories($product_id, $user->getUserId());
+            ->getProductWithCategories($id, $user->getUserId());
 
         if (!$product) {
             //There is no such product.
-            $this->addFlash('notice', 'Product id is incorrect.');
-
-            return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
+            throw $this->createNotFoundException('Product not found');
         }
 
         //Retrieving product's categories
@@ -150,7 +197,7 @@ dump($products);
         $form = $this->createForm('Vitchkovski\ProductsBundle\Form\ProductType', $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isValid()) {
 
             //Checking if image was submitted
             $file = $product->getProductImgName();
@@ -184,17 +231,25 @@ dump($products);
             $this->getDoctrine()->getManager()
                 ->flush();
 
-            //return to the personal page
-            return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
+            $encoders = new JsonEncoder();
+            $normalizers = new ObjectNormalizer();
+
+            $normalizers->setCircularReferenceHandler(function ($category) {
+                return $category->getCategories();
+            });
+
+            $normalizers->setIgnoredAttributes(array('user', 'categories1'));
+
+
+            $serializer = new Serializer(array($normalizers), array($encoders));
+
+            $jsonContent = $serializer->serialize($product, 'json');
+
+            return new View($jsonContent, Response::HTTP_CREATED);
         }
 
         //form was not submitted yet, rendering form
-        return $this->render('VitchkovskiProductsBundle:Products:editProduct.html.twig', array(
-            'form' => $form->createView(),
-            'product' => $product,
-            'categories_number' => count($categories),
-            'product_img' => $product->getProductImgName(),
-        ));
+        return 'Something went wrong';
     }
 
 }

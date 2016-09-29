@@ -1,4 +1,9 @@
 VitchkovskiProductsBundle_api_users:
-    resource: "@VitchkovskiProductsBundle/Controller/UsersController.php"
+    resource: "@VitchkovskiProductsBundle/Controller/RestControllers/UsersController.php"
     type: rest
     name_prefix: api_users_
+
+VitchkovskiProductsBundle_api_products:
+    resource: "@VitchkovskiProductsBundle/Controller/RestControllers/ProductsController.php"
+    type: rest
+    name_prefix: api_products_

@@ -29,14 +29,18 @@ class ProductType extends AbstractType
                 'allow_delete' => true,
             ));
     }
-
+    public function getName()
+    {
+        return 'product';
+    }
     /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Vitchkovski\ProductsBundle\Entity\Product'
+            'data_class' => 'Vitchkovski\ProductsBundle\Entity\Product',
+            'csrf_protection'   => false,
         ));
     }
 }

@@ -56,6 +56,6 @@ mvms_api:
     type:     rest
     prefix:   /api
     resource: "@VitchkovskiProductsBundle/Resources/config/api-routing.yml"
-    methods:  POST|GET
+    methods:  POST|GET|DELETE|PUT
     requirements:
         id:  \d+
