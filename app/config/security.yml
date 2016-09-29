@@ -3,12 +3,19 @@ security:
         administrators: 
             entity:
               class: VitchkovskiProductsBundle:User
+             # property: apiKey
+
     encoders:
         Vitchkovski\ProductsBundle\Entity\User:
-            algorithm: bcrypt
-            cost: 12    
+            algorithm: sha512
+            #cost: 12
     
     firewalls:
+        api:
+            pattern: ^/api(?!/users/key)
+            guard:
+                authenticators:
+                    - app.token_authenticator
         dev:
             pattern: ^/(_(profiler|wdt|error)|css|images|js)/
             security: false
@@ -24,6 +31,8 @@ security:
             logout:    
                 path: /logout
                 target: /login
+
+
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

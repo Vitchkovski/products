@@ -2,3 +2,7 @@ services:
     app.image_uploader:
         class: Vitchkovski\ProductsBundle\Services\ImageUploader
         arguments: ['../web/uploads/']
+    app.token_authenticator:
+        class: Vitchkovski\ProductsBundle\Services\TokenAuthenticator
+        arguments: ["@doctrine.orm.entity_manager"]
+

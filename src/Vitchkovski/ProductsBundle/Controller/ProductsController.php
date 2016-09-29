@@ -21,7 +21,8 @@ class ProductsController extends Controller
             ->getRepository('VitchkovskiProductsBundle:Product')
             ->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
 
-
+        $serializer = $this->get('serializer');
+dump($serializer);
 
         return $this->render('VitchkovskiProductsBundle:Products:userPersonalPage.html.twig', array(
             'products' => $products

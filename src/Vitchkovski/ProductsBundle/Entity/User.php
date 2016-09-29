@@ -77,6 +77,12 @@ class User implements UserInterface
      */
     protected $hash_key;
 
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    protected $api_key;
+
+
 
     /**
      * @ORM\OneToMany(targetEntity="Product", mappedBy="user")
@@ -221,4 +227,28 @@ class User implements UserInterface
         return $this->hash_key;
     }
 
+
+
+    /**
+     * Set api_key
+     *
+     * @param string $apiKey
+     * @return User
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->api_key = $apiKey;
+
+        return $this;
+    }
+
+    /**
+     * Get api_key
+     *
+     * @return string 
+     */
+    public function getApiKey()
+    {
+        return $this->api_key;
+    }
 }

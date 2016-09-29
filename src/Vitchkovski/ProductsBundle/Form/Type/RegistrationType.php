@@ -36,6 +36,7 @@ class RegistrationType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'Vitchkovski\ProductsBundle\Entity\User',
             'validation_groups' => array('registration'),
+            'csrf_protection'   => false,
         ]);
     }
 
