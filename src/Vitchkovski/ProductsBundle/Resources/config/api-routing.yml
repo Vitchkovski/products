@@ -7,3 +7,8 @@ VitchkovskiProductsBundle_api_products:
     resource: "@VitchkovskiProductsBundle/Controller/RestControllers/ProductsController.php"
     type: rest
     name_prefix: api_products_
+
+VitchkovskiProductsBundle_api_categories:
+    resource: "@VitchkovskiProductsBundle/Controller/RestControllers/CategoriesController.php"
+    type: rest
+    name_prefix: api_categories_

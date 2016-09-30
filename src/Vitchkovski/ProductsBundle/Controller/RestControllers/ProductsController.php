@@ -238,7 +238,7 @@ class ProductsController extends FOSRestController
                 return $category->getCategories();
             });
 
-            $normalizers->setIgnoredAttributes(array('user', 'categories1'));
+            $normalizers->setIgnoredAttributes(array('user'));
 
 
             $serializer = new Serializer(array($normalizers), array($encoders));
@@ -248,8 +248,9 @@ class ProductsController extends FOSRestController
             return new View($jsonContent, Response::HTTP_CREATED);
         }
 
-        //form was not submitted yet, rendering form
-        return 'Something went wrong';
+        return View::create($form, 400);
     }
+
+
 
 }

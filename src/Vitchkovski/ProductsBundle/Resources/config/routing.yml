@@ -59,3 +59,4 @@ mvms_api:
     methods:  POST|GET|DELETE|PUT
     requirements:
         id:  \d+
+        category_id:  \d+

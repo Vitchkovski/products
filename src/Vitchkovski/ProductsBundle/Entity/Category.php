@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Vitchkovski\ProductsBundle\Repository\CategoryRepository")
  * @ORM\Table(name="user_categories")
  * @ORM\HasLifecycleCallbacks
  */
@@ -78,6 +78,8 @@ class Category
 
         return $this;
     }
+
+
 
     /**
      * Get product
