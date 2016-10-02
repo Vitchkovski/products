@@ -18,6 +18,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class ProductsController extends FOSRestController
 {
+    //get product info API
     public function getProductAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -34,12 +35,12 @@ class ProductsController extends FOSRestController
         $encoders = new JsonEncoder();
         $normalizers = new ObjectNormalizer();
 
+        //circular reference must be handled
         $normalizers->setCircularReferenceHandler(function ($category) {
             return $category->getCategories();
         });
 
-        $normalizers->setIgnoredAttributes(array('user', 'categories1'));
-
+        $normalizers->setIgnoredAttributes(array('user'));
 
         $serializer = new Serializer(array($normalizers), array($encoders));
 
@@ -49,6 +50,7 @@ class ProductsController extends FOSRestController
 
     }
 
+    //get products for the given user API
     public function getProductsAction()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -65,6 +67,7 @@ class ProductsController extends FOSRestController
         $encoders = new JsonEncoder();
         $normalizers = new ObjectNormalizer();
 
+        //handling circular reference
         $normalizers->setCircularReferenceHandler(function ($category) {
             return $category->getCategories();
         });
@@ -79,6 +82,7 @@ class ProductsController extends FOSRestController
         return $jsonContent;
     }
 
+    //creating new product API
     public function getProductsNewAction(Request $request)
     {
         //retrieving user info
@@ -91,7 +95,6 @@ class ProductsController extends FOSRestController
         $form = $this->createForm('Vitchkovski\ProductsBundle\Form\ProductType', $product);
         $form->handleRequest($request);
 
-        //dump($form->getData());
 
         if ($form->isValid()) {
             $file = $product->getProductImgName();
@@ -128,6 +131,7 @@ class ProductsController extends FOSRestController
             $encoders = new JsonEncoder();
             $normalizers = new ObjectNormalizer();
 
+            //handling circular reference
             $normalizers->setCircularReferenceHandler(function ($category) {
                 return $category->getCategories();
             });
@@ -142,12 +146,11 @@ class ProductsController extends FOSRestController
             return new View($jsonContent, Response::HTTP_CREATED);
         }
 
-
-
         return View::create($form, 400);
 
     }
 
+    //product delete API
     public function getProductsRemoveAction($id)
     {
         //retrieving user info
@@ -172,6 +175,7 @@ class ProductsController extends FOSRestController
 
     }
 
+    //edit Product API
     public function getProductsEditAction($id, Request $request)
     {
         //retrieving user info
@@ -234,6 +238,7 @@ class ProductsController extends FOSRestController
             $encoders = new JsonEncoder();
             $normalizers = new ObjectNormalizer();
 
+            //handling circular reference
             $normalizers->setCircularReferenceHandler(function ($category) {
                 return $category->getCategories();
             });

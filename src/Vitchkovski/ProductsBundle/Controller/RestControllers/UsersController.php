@@ -20,9 +20,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UsersController extends FOSRestController
 {
-    /**
-     * @Rest\View
-     */
+
+    //get user API
     public function getUserAction($id)
     {
 
@@ -47,7 +46,7 @@ class UsersController extends FOSRestController
         return $jsonContent;
     }
 
-    //get user api action
+    //get users api action
     public function getUsersAction()
     {
         $users = $this
@@ -161,19 +160,63 @@ class UsersController extends FOSRestController
 
 
         }
-        /*$user = $this->getDoctrine()->getManager()
-            ->getRepository('VitchkovskiProductsBundle:User')
-            ->findOneBy(array('hash_key' => $resetEmailCode));
 
-        $authenticationUtils = $this->get('security.authentication_utils');
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();*/
 
         return View::create($form, 400);
 
-        /*$this->get('security.token_storage')->setToken($token);
-        $this->get('session')->set('_security_main', serialize($token));*/
 
     }
+
+    //API to submit password recovery email
+    public function getUsersPasswordRecoveryAction(Request $request)
+    {
+        //General process of password resetting. Showing form to submit email, sending email
+        $form = $this->createForm(\Vitchkovski\ProductsBundle\Form\Type\PasswordRecoverType::class);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+
+            $email = $form["email"]->getData();
+
+            //we must check first if user with such email exists in the DB
+            $user = $this->getDoctrine()->getManager()
+                ->getRepository('VitchkovskiProductsBundle:User')
+                ->findOneBy(array('email' => $email));
+
+            if (!$user) {
+                //there is no such user. Show error.
+                return new JsonResponse('Email not found in the DB', 401);
+            }
+
+
+            //sending email...
+            //Generating security field
+            $username = $user->getUsername();
+            $emailResetLinkCode = sha1($username . '1ws65$ngU' . uniqid(rand(), true));
+
+            //saving security filed to the user record
+            $user->setHashKey($emailResetLinkCode);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
+
+            //preparing message
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Reset your Email')
+                ->setFrom('mail@vitchkovski.com', 'Vitchkovski')
+                ->setTo($email)
+                ->setBody(
+                    $this->renderView(
+                        '@VitchkovskiProducts/Templates/resetPasswordEmail.html.twig',
+                        array('name' => $username, 'security_code' => $emailResetLinkCode)
+                    ),
+                    'text/html');
+
+            //send
+            $this->get('mailer')->send($message);
+
+        }
+
+        return View::create($form, 400);
+    }
+
 }

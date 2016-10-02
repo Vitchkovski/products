@@ -22,7 +22,7 @@ class ProductsController extends Controller
             ->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
 
         $serializer = $this->get('serializer');
-dump($products);
+        dump($products);
 
         return $this->render('VitchkovskiProductsBundle:Products:userPersonalPage.html.twig', array(
             'products' => $products

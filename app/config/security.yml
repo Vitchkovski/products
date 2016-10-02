@@ -12,7 +12,7 @@ security:
     
     firewalls:
         api:
-            pattern: ^/api(?!/users/key)
+            pattern: ^/api(?!/users/key|/users/password/recovery)
             guard:
                 authenticators:
                     - app.token_authenticator

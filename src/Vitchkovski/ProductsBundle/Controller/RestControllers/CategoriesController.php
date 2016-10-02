@@ -19,6 +19,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class CategoriesController extends FOSRestController
 {
 
+    //get category info API
     public function getCategoryAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -34,6 +35,7 @@ class CategoriesController extends FOSRestController
         $encoders = new JsonEncoder();
         $normalizers = new ObjectNormalizer();
 
+        //circular reference must ne handled
         $normalizers->setCircularReferenceHandler(function ($product) {
             return $product->getProduct();
         });
@@ -48,6 +50,7 @@ class CategoriesController extends FOSRestController
         return $jsonContent;
     }
 
+    //remove Category API
     public function getCategoryRemoveAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
