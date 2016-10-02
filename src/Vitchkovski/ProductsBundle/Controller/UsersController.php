@@ -31,7 +31,6 @@ class UsersController extends Controller
         $registration = new User();
 
         $form = $this->createForm(RegistrationType::class, $registration);
-        dump($request);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
@@ -48,7 +47,6 @@ class UsersController extends Controller
             //3.5) Creating apiKey
             $apiKey = md5($user->getUsername() . '1ws65$ngU');
             $user->setApiKey($apiKey);
-            dump($apiKey);
 
             // 4) save the User!
             $this->getDoctrine()->getManager()->persist($user);

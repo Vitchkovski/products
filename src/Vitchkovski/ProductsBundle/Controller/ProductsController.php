@@ -21,9 +21,6 @@ class ProductsController extends Controller
             ->getRepository('VitchkovskiProductsBundle:Product')
             ->findBy(array('user' => $user->getUserId()), array('product_id' => 'DESC'));
 
-        $serializer = $this->get('serializer');
-        dump($products);
-
         return $this->render('VitchkovskiProductsBundle:Products:userPersonalPage.html.twig', array(
             'products' => $products
         ));
@@ -41,8 +38,6 @@ class ProductsController extends Controller
         //preparing form
         $form = $this->createForm('Vitchkovski\ProductsBundle\Form\ProductType', $product);
         $form->handleRequest($request);
-
-        dump($request);
 
         //if form was submitted a new product must be created in the DB
         if ($form->isSubmitted() && $form->isValid()) {

@@ -111,6 +111,9 @@ class UsersController extends FOSRestController
             $pwd = $encoder->encodePassword($user, $pwd);
             $user->setPassword($pwd);
 
+            //4) Creating apiKey
+            $apiKey = md5($user->getUsername() . '1ws65$ngU');
+            $user->setApiKey($apiKey);
 
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
@@ -132,7 +135,6 @@ class UsersController extends FOSRestController
         $form->handleRequest($request);
 
         $user = $form->getData();
-        //dump($user);
 
         if ($form->isValid()) {
 
@@ -161,9 +163,7 @@ class UsersController extends FOSRestController
 
         }
 
-
         return View::create($form, 400);
-
 
     }
 
