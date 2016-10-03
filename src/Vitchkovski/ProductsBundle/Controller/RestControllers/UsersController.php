@@ -48,7 +48,7 @@ class UsersController extends FOSRestController
     }
 
     //get users api action
-    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/users/1
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/users
     public function getUsersAction()
     {
         $users = $this
