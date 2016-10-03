@@ -20,6 +20,7 @@ class CategoriesController extends FOSRestController
 {
 
     //get category info API
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/categories/7
     public function getCategoryAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -51,6 +52,7 @@ class CategoriesController extends FOSRestController
     }
 
     //remove Category API
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/categories/7/remove
     public function getCategoryRemoveAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();

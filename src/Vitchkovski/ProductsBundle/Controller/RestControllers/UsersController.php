@@ -22,6 +22,7 @@ class UsersController extends FOSRestController
 {
 
     //get user API
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/users/1
     public function getUserAction($id)
     {
 
@@ -47,6 +48,7 @@ class UsersController extends FOSRestController
     }
 
     //get users api action
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/users/1
     public function getUsersAction()
     {
         $users = $this
@@ -67,6 +69,7 @@ class UsersController extends FOSRestController
     }
 
     //get info for the logged user api action
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/users/me
     public function getUsersMeAction()
     {
         if (!is_object($this->getUser())) {
@@ -89,6 +92,7 @@ class UsersController extends FOSRestController
     }
 
     //create new user with api
+    //curl -v -H "Accept: application/json" -H "Content-type: application/json" POST -d "{\"registration\": {\"username\":\"foo3\", \"email\": \"foo3@example.org\", \"password\": \"123456\"}}" http://vitchkovski.com/api/users/new
     public function getUsersNewAction(Request $request)
     {
 
@@ -124,7 +128,8 @@ class UsersController extends FOSRestController
         return View::create($form, 400);
     }
 
-    //login action with API
+    //get User API key
+    //curl -v -H "Accept: application/json" -H "Content-type: application/json" POST -d "{\"user\": {\"email\":\"lsa15gmail.com\", \"password\": \"123123\"}}" http://vitchkovski.com/api/users/key
     public function getUsersKeyAction(Request $request)
     {
 
@@ -168,6 +173,7 @@ class UsersController extends FOSRestController
     }
 
     //API to submit password recovery email
+    //curl -v -H "Accept: application/json" -H "Content-type: application/json" POST -d "{\"password_recovery\": {\"email\": \"lsa15@gmail.com\"}}" http://vitchkovski.com/api/users/password/recovery
     public function getUsersPasswordRecoveryAction(Request $request)
     {
         //General process of password resetting. Showing form to submit email, sending email

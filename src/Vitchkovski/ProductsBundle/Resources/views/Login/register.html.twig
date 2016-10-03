@@ -18,17 +18,11 @@
 
         </form>
 
-    {% spaceless %}
-        {% if not form.vars.valid  %}
-            <div class="alert alert-danger">
-                {{ form_errors(form) }}
-
-            {% for children in form.children %}
-                {% if not children.vars.valid %}
-                        {{ form_errors(children) }}
-                    {% endif %}
-                {% endfor %}
-            </div>
+        {% if errors is defined  and errors|length > 0%}
+            {%- for error in errors -%}
+            <p class="alert alert-danger">
+                {{ error[0] }}
+            </p>
+            {%- endfor -%}
         {% endif %}
-    {% endspaceless %}
 {% endblock %}

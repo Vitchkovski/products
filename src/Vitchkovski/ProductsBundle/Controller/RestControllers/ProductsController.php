@@ -19,6 +19,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class ProductsController extends FOSRestController
 {
     //get product info API
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/products/1
     public function getProductAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -51,6 +52,7 @@ class ProductsController extends FOSRestController
     }
 
     //get products for the given user API
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/products
     public function getProductsAction()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -83,6 +85,7 @@ class ProductsController extends FOSRestController
     }
 
     //creating new product API
+    //curl -v -H "Accept: application/json" -H "Content-type: application/json" -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" POST -d "{\"product\": {\"product_name\": \"foo\"}}" http://vitchkovski.com/api/products/new
     public function getProductsNewAction(Request $request)
     {
         //retrieving user info
@@ -151,6 +154,7 @@ class ProductsController extends FOSRestController
     }
 
     //product delete API
+    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/products/11/remove
     public function getProductsRemoveAction($id)
     {
         //retrieving user info
@@ -176,6 +180,7 @@ class ProductsController extends FOSRestController
     }
 
     //edit Product API
+    //curl -v -H "Accept: application/json" -H "Content-type: application/json" -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" PUT -d "{\"product\":{\"product_name\":\"QWERTY3\",\"categories\":[{\"category_name\":\"\"},{\"category_name\":\"Category3\"}]}}" http://vitchkovski.com/api/products/16/edit
     public function getProductsEditAction($id, Request $request)
     {
         //retrieving user info
