@@ -33,4 +33,4 @@ monolog:
 swiftmailer:
     transport: gmail
     username:  seriak.artyom@gmail.com
-    password:  has54ret20&
+    password:  has54ret20

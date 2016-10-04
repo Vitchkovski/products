@@ -4,15 +4,9 @@ namespace Vitchkovski\ProductsBundle\Controller\RestControllers;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Vitchkovski\ProductsBundle\Entity\Category;
-use Vitchkovski\ProductsBundle\Entity\Product;
-use Vitchkovski\ProductsBundle\Form\ProductType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 

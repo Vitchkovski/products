@@ -48,7 +48,7 @@ class UsersController extends FOSRestController
     }
 
     //get users api action
-    //curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/users
+    //curl -H "X-AUTH-TOKEN: ee8cc5f8cf56e99c366bcc2361f0031f" http://vitchkovski.com/api/users
     public function getUsersAction()
     {
         $users = $this
@@ -208,7 +208,7 @@ class UsersController extends FOSRestController
             //preparing message
             $message = \Swift_Message::newInstance()
                 ->setSubject('Reset your Email')
-                ->setFrom('mail@vitchkovski.com', 'Vitchkovski')
+                ->setFrom('mail@vitchkovski.com', 'Vitchkovski1')
                 ->setTo($email)
                 ->setBody(
                     $this->renderView(
