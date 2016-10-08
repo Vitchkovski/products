@@ -54,4 +54,35 @@ class UsersService extends Controller
         return $user;
     }
 
+    public function sendPasswordRecoveryEmail($form, $user)
+    {
+
+        $email = $form["email"]->getData();
+
+        //sending email...
+        //Generating security field
+        $username = $user->getUsername();
+        $emailResetLinkCode = sha1($username . '1ws65$ngU' . uniqid(rand(), true));
+
+        //saving security filed to the user record
+        $user->setHashKey($emailResetLinkCode);
+        $this->getDoctrine()->getManager()->persist($user);
+        $this->getDoctrine()->getManager()->flush();
+
+        //preparing message
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Reset your Email')
+            ->setFrom('mail@vitchkovski.com', 'Vitchkovski1')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                    '@VitchkovskiProducts/Templates/resetPasswordEmail.html.twig',
+                    array('name' => $username, 'security_code' => $emailResetLinkCode)
+                ),
+                'text/html');
+
+        //send
+        $this->get('mailer')->send($message);
+    }
+
 }

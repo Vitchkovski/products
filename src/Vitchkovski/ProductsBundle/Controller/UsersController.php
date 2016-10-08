@@ -65,12 +65,10 @@ class UsersController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $email = $form["email"]->getData();
-
             //we must check first if user with such email exists in the DB
             $user = $this->getDoctrine()->getManager()
                 ->getRepository('VitchkovskiProductsBundle:User')
-                ->findOneBy(array('email' => $email));
+                ->findOneBy(array('email' => $form["email"]->getData()));
 
             if (!$user) {
                 //there is no such user. Show error.
@@ -81,31 +79,8 @@ class UsersController extends Controller
                 return $this->redirectToRoute('VitchkovskiProductsBundle_restorePassword');
             }
 
-
-            //sending email...
-            //Generating security field
-            $username = $user->getUsername();
-            $emailResetLinkCode = sha1($username . '1ws65$ngU' . uniqid(rand(), true));
-
-            //saving security filed to the user record
-            $user->setHashKey($emailResetLinkCode);
-            $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
-
-            //preparing message
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Reset your Email')
-                ->setFrom('mail@vitchkovski.com', 'Vitchkovski')
-                ->setTo($email)
-                ->setBody(
-                    $this->renderView(
-                        '@VitchkovskiProducts/Templates/resetPasswordEmail.html.twig',
-                        array('name' => $username, 'security_code' => $emailResetLinkCode)
-                    ),
-                    'text/html');
-
-            //send
-            $this->get('mailer')->send($message);
+            //general process to send an email
+            $this->get('app.users_service')->sendPasswordRecoveryEmail($form, $user);
 
             $this->addFlash(
                 'notice',

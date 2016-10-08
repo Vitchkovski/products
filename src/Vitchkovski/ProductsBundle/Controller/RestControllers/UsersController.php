@@ -170,19 +170,19 @@ class UsersController extends FOSRestController
         $form->handleRequest($request);
         if ($form->isValid()) {
 
-            $email = $form["email"]->getData();
-
             //we must check first if user with such email exists in the DB
             $user = $this->getDoctrine()->getManager()
                 ->getRepository('VitchkovskiProductsBundle:User')
-                ->findOneBy(array('email' => $email));
+                ->findOneBy(array('email' => $form["email"]->getData()));
 
             if (!$user) {
                 //there is no such user. Show error.
                 return new JsonResponse('Email not found in the DB', 401);
             }
 
+            $this->get('app.users_service')->sendPasswordRecoveryEmail($form, $user);
 
+/*
             //sending email...
             //Generating security field
             $username = $user->getUsername();
@@ -206,7 +206,7 @@ class UsersController extends FOSRestController
                     'text/html');
 
             //send
-            $this->get('mailer')->send($message);
+            $this->get('mailer')->send($message);*/
 
         }
 
