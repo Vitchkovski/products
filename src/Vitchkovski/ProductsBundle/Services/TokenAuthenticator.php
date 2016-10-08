@@ -49,6 +49,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         if (!$user) {
             throw new AuthenticationCredentialsNotFoundException();
         }
+
         return $user;
     }
 

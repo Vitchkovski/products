@@ -1,6 +1,6 @@
 VitchkovskiProductsBundle_homepage:
     path:     /
-    defaults: { _controller: VitchkovskiProductsBundle:Users:register }
+    defaults: { _controller: VitchkovskiProductsBundle:Security:login }
 
 
 VitchkovskiProductsBundle_login:
