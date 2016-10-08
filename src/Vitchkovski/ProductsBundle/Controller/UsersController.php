@@ -36,21 +36,8 @@ class UsersController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user = $form->getData();
-
-            // 3) Encode the password
-            $pwd = $user->getPassword();
-            $encoder = $this->container->get('security.password_encoder');
-            $pwd = $encoder->encodePassword($user, $pwd);
-            $user->setPassword($pwd);
-
-            //3.5) Creating apiKey
-            $apiKey = md5($user->getUsername() . '1ws65$ngU');
-            $user->setApiKey($apiKey);
-
-            // 4) save the User!
-            $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
+            //general process for saving user to the DB
+            $user = $this->get('app.users_service')->saveUserToDB($form);
 
             //5) Log in user right after creation
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());

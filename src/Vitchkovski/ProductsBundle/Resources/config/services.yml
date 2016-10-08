@@ -5,4 +5,6 @@ services:
     app.token_authenticator:
         class: Vitchkovski\ProductsBundle\Services\TokenAuthenticator
         arguments: ["@doctrine.orm.entity_manager"]
-
+    app.users_service:
+        class: Vitchkovski\ProductsBundle\Services\UsersService
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
