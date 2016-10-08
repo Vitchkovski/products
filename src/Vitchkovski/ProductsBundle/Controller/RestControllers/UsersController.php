@@ -107,20 +107,8 @@ class UsersController extends FOSRestController
 
         if ($form->isValid()) {
 
-            $user = $form->getData();
-
-            // 3) Encode the password
-            $pwd = $user->getPassword();
-            $encoder = $this->container->get('security.password_encoder');
-            $pwd = $encoder->encodePassword($user, $pwd);
-            $user->setPassword($pwd);
-
-            //4) Creating apiKey
-            $apiKey = md5($user->getUsername() . '1ws65$ngU');
-            $user->setApiKey($apiKey);
-
-            $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
+            //general process for saving user to the DB
+            $user = $this->get('app.users_service')->saveUserToDB($form);
 
             return new View($user, Response::HTTP_CREATED);
         }

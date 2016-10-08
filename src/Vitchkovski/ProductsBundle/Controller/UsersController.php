@@ -39,12 +39,12 @@ class UsersController extends Controller
             //general process for saving user to the DB
             $user = $this->get('app.users_service')->saveUserToDB($form);
 
-            //5) Log in user right after creation
+            //Log in user right after creation
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $this->get('security.token_storage')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
 
-            //6) Redirecting to the personal page
+            // Redirecting to the personal page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
         }
 
