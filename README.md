@@ -66,3 +66,15 @@ http://vitchkovski.com/api/products/{product_id}/edit
 Example:
 curl -v -H "Accept: application/json" -H "Content-type: application/json" -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" PUT -d "{\"product\":{\"product_name\":\"QWERTY3\",\"categories\":[{\"category_name\":\"\"},{\"category_name\":\"Category3\"}]}}" http://vitchkovski.com/api/products/16/edit
 -------------------------------------------------------
+11) Get category info:
+http://vitchkovski.com/api/categories/{category_id}
+
+Example:
+curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/categories/7
+-------------------------------------------------------
+12) Remove category:
+http://vitchkovski.com/api/categories/{category_id}/remove
+
+Example:
+curl -H "X-AUTH-TOKEN: a846112941c879a6866cf252d5eaf0a7" http://vitchkovski.com/api/categories/7/remove
+-------------------------------------------------------
