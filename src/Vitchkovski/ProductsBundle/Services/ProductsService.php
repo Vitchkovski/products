@@ -31,9 +31,10 @@ class ProductsService extends Controller
         $this->container = $container;
     }
 
-    public function saveProductToDB($form, $user)
+    public function saveCreateProductToDB($form, $user)
     {
         $product = $form->getData();
+
 
         //Checking if file was submitted
         $file = $product->getProductImgName();
@@ -68,6 +69,43 @@ class ProductsService extends Controller
         $this->em->flush();
 
         return $product;
+    }
+
+    public function saveEditProductToDB($form, $user, $productImg)
+    {
+        $product = $form->getData();
+        $categories = $product->getCategories();
+
+        //Checking if image was submitted
+        $file = $product->getProductImgName();
+        if ($file) {
+            //starting general processing process for uploaded images.
+            //Generating new image name, cropping image, moving both original and cropped images to the user's folder.
+            $fileName = $this->get('app.image_uploader')->upload($file, $user->getUserId());
+
+            //saving new image name
+            $product->setProductImgName($fileName);
+
+        } else {
+
+            //saving original image name (whether it is null or not)
+            $product->setProductImgName($productImg);
+        }
+
+
+        foreach ($categories as $category) {
+            if ($category->getCategoryName() !== null) {
+                //for each category submitted we must set product reference
+                $category->setProduct($product);
+            } else {
+                //if null category was submitted we have to delete it from the DB
+                $this->getDoctrine()->getManager()
+                    ->remove($category);
+            }
+        }
+
+        //saving changes
+        $this->em->flush();
     }
 
 }

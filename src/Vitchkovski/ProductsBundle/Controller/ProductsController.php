@@ -118,37 +118,8 @@ class ProductsController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //Checking if image was submitted
-            $file = $product->getProductImgName();
-            if ($file) {
-                //starting general processing process for uploaded images.
-                //Generating new image name, cropping image, moving both original and cropped images to the user's folder.
-                $fileName = $this->get('app.image_uploader')->upload($file, $user->getUserId());
-
-                //saving new image name
-                $product->setProductImgName($fileName);
-
-            } else {
-
-                //saving original image name (whether it is null or not)
-                $product->setProductImgName($productImg);
-            }
-
-
-            foreach ($categories as $category) {
-                if ($category->getCategoryName() !== null) {
-                    //for each category submitted we must set product reference
-                    $category->setProduct($product);
-                } else {
-                    //if null category was submitted we have to delete it from the DB
-                    $this->getDoctrine()->getManager()
-                        ->remove($category);
-                }
-            }
-
-            //saving changes
-            $this->getDoctrine()->getManager()
-                ->flush();
+            //general process  for ssaving edited product to the DB
+            $this->get('app.products_service')->saveEditProductToDB($form, $user, $productImg);
 
             //return to the personal page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');
