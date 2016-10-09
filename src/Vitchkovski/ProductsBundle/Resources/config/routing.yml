@@ -33,6 +33,10 @@ VitchkovskiProductsBundle_userPersonalPage:
     requirements:
         methods:  GET|POST
 
+VitchkovskiProductsBundle_userInfoPage:
+    path:  /products/me
+    defaults: { _controller: "VitchkovskiProductsBundle:Users:showUserInfo" }
+
 VitchkovskiProductsBundle_createProduct:
     path:  /products/create
     defaults: { _controller: "VitchkovskiProductsBundle:Products:create" }

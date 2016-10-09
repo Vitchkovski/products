@@ -142,5 +142,14 @@ class UsersController extends Controller
 
     }
 
+    public function showUserInfoAction()
+    {
+        //retrieving user info
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        return $this->render('VitchkovskiProductsBundle:Login:userInfo.html.twig',
+            array('user' => $user));
+    }
+
 
 }
