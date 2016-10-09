@@ -8,3 +8,6 @@ services:
     app.users_service:
         class: Vitchkovski\ProductsBundle\Services\UsersService
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    app.products_service:
+        class: Vitchkovski\ProductsBundle\Services\ProductsService
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]

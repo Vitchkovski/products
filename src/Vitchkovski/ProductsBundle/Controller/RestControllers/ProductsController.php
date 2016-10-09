@@ -98,36 +98,9 @@ class ProductsController extends FOSRestController
 
 
         if ($form->isValid()) {
-            $file = $product->getProductImgName();
-            if ($file) {
-                //starting general processing process for uploaded images.
-                //Generating new image name, cropping image, moving both original and cropped images to the user's folder.
-                $fileName = $this->get('app.image_uploader')->upload($file, $user->getUserId());
 
-                //saving product image name
-                $product->setProductImgName($fileName);
-            }
-
-
-            //setting user info for a new product
-            $product->setUser($user);
-
-            //retrieving submitted categories
-            $categories = $product->getCategories();
-
-            foreach ($categories as $category) {
-                if ($category->getCategoryName() !== null) {
-                    //for each category submitted we must set product reference
-                    $category->setProduct($product);
-                } else {
-                    //if null category was submitted - we don't need to save it in the DB
-                    $product->removeCategory($category);
-                }
-            }
-
-            //saving changes to the DB
-            $this->getDoctrine()->getManager()->persist($product);
-            $this->getDoctrine()->getManager()->flush();
+            //general process of saving product to the DB
+            $product = $this->get('app.products_service')->saveProductToDB($form, $user);
 
             $encoders = new JsonEncoder();
             $normalizers = new ObjectNormalizer();
@@ -137,8 +110,7 @@ class ProductsController extends FOSRestController
                 return $category->getCategories();
             });
 
-            $normalizers->setIgnoredAttributes(array('user', 'categories1'));
-
+            $normalizers->setIgnoredAttributes(array('user'));
 
             $serializer = new Serializer(array($normalizers), array($encoders));
 
