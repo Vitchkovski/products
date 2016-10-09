@@ -24,7 +24,7 @@
         <tbody>
         {% for product in products %}
             <tr>
-                <th>
+                <th style="width: 75px;">
                     {% if product.productImgName|length > 0 %}
                         <a href="{{ asset('uploads/'~ product.user.userId ~ '/original/'~product.productImgName) }}"
                            target="_blank">

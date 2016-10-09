@@ -4,23 +4,11 @@ namespace Vitchkovski\ProductsBundle\Controller;
 
 use Vitchkovski\ProductsBundle\Entity\User;
 use Vitchkovski\ProductsBundle\Form\PasswordRecoverType;
-use Vitchkovski\ProductsBundle\Form\UserType;
-use Vitchkovski\ProductsBundle\VitchkovskiProductsBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Vitchkovski\ProductsBundle\Form\Type\RegistrationType;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class UsersController extends Controller

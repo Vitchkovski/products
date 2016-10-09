@@ -2,7 +2,6 @@
 
 namespace Vitchkovski\ProductsBundle\Controller;
 
-use Vitchkovski\ProductsBundle\Entity\Category;
 use Vitchkovski\ProductsBundle\Entity\Product;
 use Vitchkovski\ProductsBundle\Form\ProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
