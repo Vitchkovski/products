@@ -40,7 +40,7 @@ class ProductType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Vitchkovski\ProductsBundle\Entity\Product',
-            'csrf_protection'   => false,
+            //'csrf_protection'   => false,
         ));
     }
 }

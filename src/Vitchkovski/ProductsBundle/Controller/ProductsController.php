@@ -43,7 +43,7 @@ class ProductsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             //general process of saving product to the DB
-            $this->get('app.products_service')->saveProductToDB($form, $user);
+            $this->get('app.products_service')->saveCreateProductToDB($form, $user);
 
             //return to the products page
             return $this->redirectToRoute('VitchkovskiProductsBundle_userPersonalPage');

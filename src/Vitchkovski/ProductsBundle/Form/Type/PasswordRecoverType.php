@@ -21,9 +21,9 @@ class PasswordRecoverType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        /*$resolver->setDefaults([
             'csrf_protection'   => false,
-        ]);
+        ]);*/
     }
 
 }

@@ -50,6 +50,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             throw new AuthenticationCredentialsNotFoundException();
         }
 
+        //tell symfony this is an API user
+        $user->setRoles(array('ROLE_API'));
+
         return $user;
     }
 

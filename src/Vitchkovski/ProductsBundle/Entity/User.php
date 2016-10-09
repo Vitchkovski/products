@@ -26,7 +26,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->products = new ArrayCollection();
-
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -82,7 +82,7 @@ class User implements UserInterface
      */
     protected $api_key;
 
-
+    protected $roles;
 
     /**
      * @ORM\OneToMany(targetEntity="Product", mappedBy="user")
@@ -153,10 +153,18 @@ class User implements UserInterface
         $this->password = $password;
     }
 
+    public function setRoles($role)
+    {
+        $this->roles = $role;
+    }
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        //return array('ROLE_USER');
+        if (!$this->roles){
+            return array('ROLE_USER');
+        }
+        return $this->roles;
     }
 
     public function eraseCredentials()
